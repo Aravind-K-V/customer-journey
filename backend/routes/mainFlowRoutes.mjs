@@ -23,7 +23,7 @@ router.post("/flow", async (req, res) => {
     const proposerId = insertResult.proposer_id;
 
     // 2️⃣ Extract required fields using your existing IDP handler logic
-    const idpResponse = await axios.post("http://localhost:8000/api/idp/extract", {
+    const idpResponse = await axios.post("http://13.202.6.228:8000/api/idp/extract", {
       proposerId: proposerId,
     });
 
@@ -41,16 +41,16 @@ router.post("/flow", async (req, res) => {
 
     // 3️⃣ Call FastAPI → extractor.py
     console.log("Sending to /convert_to_structure:", extractedData);
-    await axios.post("http://localhost:5050/convert_to_structure", {extractedData: extractedData});
+    await axios.post("http://13.202.6.228:5050/convert_to_structure", {extractedData: extractedData});
 
     // 4️⃣ Call FastAPI → rule engine
-    const ruleEngineResponse = await axios.post("http://localhost:5050/rule_engine", {
+    const ruleEngineResponse = await axios.post("http://13.202.6.228:5050/rule_engine", {
         request_id: requestId,
         proposalNumber: jsonData.proposal_number
     });
 
     // // 5️⃣ Save rule engine output in your Node `ruleEngineRoutes`
-    // await axios.post("http://localhost:8000/api/ruleEngineRoutes/save-rule-engine-result", {
+    // await axios.post("http://13.202.6.228:8000/api/ruleEngineRoutes/save-rule-engine-result", {
     //     request_id: ruleEngineResponse.data.request_id,
     //     proposal_number: ruleEngineResponse.data.proposal_number,
     //     statuses: ruleEngineResponse.data.statuses,

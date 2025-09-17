@@ -121,12 +121,12 @@ const RightSection = () => {
     setIsProcessing(true);
 
     try {
-      // Step 1: Upload to localhost:5050/upload
-      console.log("Step 1: Uploading file to localhost:5050/upload");
+      // Step 1: Upload to 13.202.6.228:5050/upload
+      console.log("Step 1: Uploading file to 13.202.6.228:5050/upload");
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      const uploadResponse = await fetch('http://localhost:5050/upload/', {
+      const uploadResponse = await fetch('http://13.202.6.228:5050/upload/', {
         method: 'POST',
         body: formData
       });
@@ -135,9 +135,9 @@ const RightSection = () => {
       const filename = uploadResult.filename;
       console.log("📁 File uploaded with filename:", filename);
 
-      // Step 2: Detect proposal form using localhost:5050/detectproposalform
+      // Step 2: Detect proposal form using 13.202.6.228:5050/detectproposalform
       console.log("Step 2: Detecting proposal form");
-      const detectResponse = await fetchWithTimeout('http://localhost:5050/detectproposalform', {
+      const detectResponse = await fetchWithTimeout('http://13.202.6.228:5050/detectproposalform', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -161,9 +161,9 @@ const RightSection = () => {
       // setUploadedFile(selectedFile);
       // setUploadComplete(true);
 
-      // Step 3: Generate presigned URL from localhost:8000/generate-presigned-url
+      // Step 3: Generate presigned URL from 13.202.6.228:8000/generate-presigned-url
       console.log("Step 3: Generating presigned URL");
-      const uploadRes = await fetch('http://localhost:8000/generate-presigned-url', {
+      const uploadRes = await fetch('http://13.202.6.228:8000/generate-presigned-url', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -196,9 +196,9 @@ const RightSection = () => {
       const s3_uri = `s3://${bucket}/${key}`;
       console.log("S3 URI created:", s3_uri);
 
-      // Step 5: Call IDP via localhost:8000/upload
-      console.log("Step 5: Calling IDP via localhost:8000/upload");
-      const idpResponse = await fetchWithTimeout('http://localhost:8000/upload', {
+      // Step 5: Call IDP via 13.202.6.228:8000/upload
+      console.log("Step 5: Calling IDP via 13.202.6.228:8000/upload");
+      const idpResponse = await fetchWithTimeout('http://13.202.6.228:8000/upload', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -263,7 +263,7 @@ const RightSection = () => {
     }
 
     try {
-      const updateResponse = await axios.post('http://localhost:8000/api/proposals/update-proposer-email',
+      const updateResponse = await axios.post('http://13.202.6.228:8000/api/proposals/update-proposer-email',
         {
           request_id: requestId, // Use the state variable
           new_email: userEmail
@@ -288,7 +288,7 @@ const RightSection = () => {
     if (!idpData)
       return;
     try {
-      const response1 = await axios.post('http://localhost:8000/api/idp/extract', {
+      const response1 = await axios.post('http://13.202.6.228:8000/api/idp/extract', {
         proposerId: proposerId
       });
 
@@ -299,7 +299,7 @@ const RightSection = () => {
       const empType = extractedData.Employment_Type || null;
       localStorage.setItem("employmentType", empType);
 
-      const convertResponse = await fetch('http://localhost:5050/convert_to_structure', {
+      const convertResponse = await fetch('http://13.202.6.228:5050/convert_to_structure', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ extractedData })   // ✅ only extractedData
@@ -321,9 +321,9 @@ const RightSection = () => {
         employmentType: empType
       };
 
-      // Step 6: Call rule engine localhost:5050/rule_engine
+      // Step 6: Call rule engine 13.202.6.228:5050/rule_engine
       console.log("Step 6: Calling rule engine");
-      const response = await fetch('http://localhost:5050/rule_engine', {
+      const response = await fetch('http://13.202.6.228:5050/rule_engine', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ proposalNumber, proposerId, request_id:requestId})

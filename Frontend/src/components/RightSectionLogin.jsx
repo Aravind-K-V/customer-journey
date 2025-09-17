@@ -11,7 +11,7 @@ const RightSectionLogin = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://localhost:8000/api/auth/login", {
+      const response = await axios.post("http://13.202.6.228:8000/api/auth/login", {
         email,
         password,
       });
@@ -22,7 +22,7 @@ const RightSectionLogin = () => {
         localStorage.setItem('username', response.data.username);
 
         // Fetch underwriting status
-        const statusResponse = await axios.get(`http://localhost:8000/api/auth/underwriting/status/${email}`);
+        const statusResponse = await axios.get(`http://13.202.6.228:8000/api/auth/underwriting/status/${email}`);
         const status = statusResponse.data.status;
 
         localStorage.setItem('underwritingStatus', status);
@@ -42,7 +42,7 @@ const RightSectionLogin = () => {
             break;
           case "Rules Applied": {
 
-            fetch(`http://localhost:8000/api/ruleEngineRoutes/rule-check?email=${encodeURIComponent(email)}`)
+            fetch(`http://13.202.6.228:8000/api/ruleEngineRoutes/rule-check?email=${encodeURIComponent(email)}`)
               .then(res => res.json())
               .then(data => {
                 // data = { finreview_required: true, mc_required: false, tele_required: true, proposerId, proposalNumber, first_member }

@@ -139,7 +139,7 @@
 
 #         try:
 #             response = requests.post(
-#                 "http://localhost:8000/api/ruleEngineRoutes/save-rule-engine-result",
+#                 "http://13.202.6.228:8000/api/ruleEngineRoutes/save-rule-engine-result",
 #                 json=payload
 #             )
 #             print(f"✅ Sent to Node.js API, Response: {response.status_code}")
@@ -225,7 +225,7 @@ app = FastAPI()
 # CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Frontend URL
+    allow_origins=["http://13.202.6.228:5173"],  # Frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -335,7 +335,7 @@ async def trigger_main(request: Request):
             # ✅ ADD THIS CHECK: Only send if we have complete data
             if payload.get("customer_data") and payload.get("expected_data"):
                 response = requests.post(
-                    "http://localhost:8000/api/ruleEngineRoutes/save-rule-engine-result",
+                    "http://13.202.6.228:8000/api/ruleEngineRoutes/save-rule-engine-result",
                     json=payload
                 )
                 print(f"✅ Sent to Node.js API, Response: {response.status_code}")
