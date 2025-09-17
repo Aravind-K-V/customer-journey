@@ -1,0 +1,848 @@
+pfd_rules:
+  # PFD = 3 if any one of the following are yes:
+  - name: PFD Critical Conditions
+    condition:
+      or:
+        - Cancer: "yes"
+        - Heart_Attack: "yes"
+        - Chronic_Liver: "yes"
+        - Kidney: "yes"
+        - Tobacco: "yes"
+    then: "PFD = 3"
+
+  # PFD = 2 if any two of the following are yes:
+  # BMI_gt_28, thyroid_disorders, digestive_system_disorders, ent_disorders, occ_eq_2, diabetes
+  - name: PFD Two Conditions
+    condition: 
+      count_yes_conditions: 2
+    then: "PFD = 2"
+
+  # PFD = 1 if only one of the following is yes
+  - name: PFD One Condition
+    condition: 
+      count_yes_conditions: 1
+    then: "PFD = 1"
+
+  # PFD = 0 if none of the above are yes
+  - name: PFD None
+    condition:
+      count_yes_conditions: 0
+    then: "PFD = 0"
+
+stp_accept_rules:
+  - condition:
+      PC: [1, 2]
+      PFD: [0]
+      Age: 1
+      SA: 1
+      Ded: 1
+      OCC: 1
+      CLOC: 1
+    result: STP-Accept
+
+  - condition:
+      PC: 1
+      PFD: 1
+      Age: [1,2]
+      SA: [1,2]
+      Ded: 1
+      OCC: 1
+      CLOC: 1
+    result: STP-Accept
+
+  - condition:
+      PC: 2
+      PFD: 1
+      Age: 1
+      SA: 1
+      Ded: 2
+      OCC: [1,2]
+      CLOC: [1,2]
+    result: STP-Accept
+
+  - condition:
+      PC: 2
+      PFD: [0, 1]
+      Age: 2
+      SA: 1
+      Ded: 2
+      OCC: 1
+      CLOC: 1
+    result: STP-Accept
+
+  - condition:
+      PC: 2
+      PFD: [0, 1]
+      Age: 1
+      SA: 1
+      Ded: 2
+      OCC: 1
+      CLOC: 1
+    result: STP-Accept
+  
+  - condition:
+      PC: 2
+      PFD: 0
+      Age: 1
+      SA: 2
+      Ded: 2
+      OCC: 1
+      CLOC: 1
+    result: STP-Accept
+
+  - condition:
+      PC: 2
+      PFD: 0
+      Age: [1, 2]
+      SA: 1
+      Ded: 2
+      OCC: 1
+      CLOC: [1, 2]
+    result: STP-Accept
+
+stp_reject_rules:
+  - condition:
+      PC: [1, 2]
+      PFD: [0, 1, 2, 3]
+      Age: 3
+      SA: [1, 2]
+      Ded: [1, 2]
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: STP-Reject
+
+non_stp_rules:
+  - condition:
+      PC: [1, 2]
+      PFD: 0
+      Age: 1
+      SA: 1
+      Ded: 1
+      OCC: 1
+      CLOC: 2
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 2
+      PFD: 0
+      Age: 1
+      SA: [1, 2]
+      Ded: 1
+      OCC: 2
+      CLOC: [1,2]
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: [1, 2]
+      PFD: 0
+      Age: 2
+      SA: 2
+      Ded: 1
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: [1, 2]
+      PFD: 0
+      Age: 2
+      SA: 1
+      Ded: 1
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: [1, 2]
+      PFD: 0
+      Age: 1
+      SA: 2
+      Ded: 1
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 1
+      PFD: 2
+      Age: [1, 2]
+      SA: [1, 2]
+      Ded: 1
+      OCC: 1
+      CLOC: 2
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 1
+      PFD: 2
+      Age: [1, 2]
+      SA: [1, 2]
+      Ded: 1
+      OCC: 1
+      CLOC: 1
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 1
+      PFD: 2
+      Age: [1, 2]
+      SA: [1, 2]
+      Ded: 1
+      OCC: 2
+      CLOC: 1
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 1
+      PFD: 2
+      Age: [1, 2]
+      SA: [1, 2]
+      Ded: 2
+      OCC: 2
+      CLOC: 1
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 1
+      PFD: 2
+      Age: [1, 2]
+      SA: [1, 2]
+      Ded: 2
+      OCC: 1
+      CLOC: 2
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 1
+      PFD: 3
+      Age: [1, 2]
+      SA: [1, 2]
+      Ded: 1
+      OCC: [1, 2]
+      CLOC: 2
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 1
+      PFD: 3
+      Age: [1, 2]
+      SA: [1, 2]
+      Ded: 2
+      OCC: [1, 2]
+      CLOC: 1
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 2
+      PFD: 1
+      Age: 1
+      SA: 1
+      Ded: 1
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 2
+      PFD: 1
+      Age: 1
+      SA: 2
+      Ded: 1
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 2
+      PFD: 1
+      Age: 1
+      SA: 2
+      Ded: 2
+      OCC: 1
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 2
+      PFD: 1
+      Age: 1
+      SA: 2
+      Ded: 2
+      OCC: 2
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 2
+      PFD: 1
+      Age: 2
+      SA: 1
+      Ded: 1
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 2
+      PFD: 2
+      Age: [1, 2]
+      SA: [1, 2]
+      Ded: 1
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 2
+      PFD: 3
+      Age: [1, 2]
+      SA: [1, 2]
+      Ded: 1
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 2
+      PFD: [2, 3]
+      Age: 2
+      SA: [1, 2]
+      Ded: 2
+      OCC: 1
+      CLOC: 1
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 2
+      PFD: [2, 3]
+      Age: 2
+      SA: [1, 2]
+      Ded: 2
+      OCC: 1
+      CLOC: 2
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 2
+      PFD: [2, 3]
+      Age: 2
+      SA: [1, 2]
+      Ded: 2
+      OCC: 2
+      CLOC: 1
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 2
+      PFD: [0, 1]
+      Age: 2
+      SA: 2
+      Ded: 2
+      OCC: 1
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 2
+      PFD: [0, 1]
+      Age: 2
+      SA: 2
+      Ded: 2
+      OCC: 2
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 2
+      PFD: 2
+      Age: 1
+      SA: 1
+      Ded: 2
+      OCC: 1
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 2
+      PFD: 2
+      Age: 1
+      SA: 1
+      Ded: 2
+      OCC: 2
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 2
+      PFD: 3
+      Age: 1
+      SA: [1, 2]
+      Ded: 2
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 2
+      PFD: 0
+      Age: 1
+      SA: 2
+      Ded: 2
+      OCC: 2
+      CLOC: 1
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 2
+      PFD: 0
+      Age: 1
+      SA: 2
+      Ded: 2
+      OCC: 1
+      CLOC: 2
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 2
+      PFD: 0
+      Age: 2
+      SA: 2
+      Ded: 2
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 2
+      PFD: 1
+      Age: [1, 2]
+      SA: 2
+      Ded: 2
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 2
+      PFD: [2, 3]
+      Age: [1, 2]
+      SA: 2
+      Ded: 2
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 2
+      PFD: 1
+      Age: [1, 2]
+      SA: 1
+      Ded: 2
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MERT
+
+  - condition:
+      PC: 2
+      PFD: [2, 3]
+      Age: [1, 2]
+      SA: 1
+      Ded: 2
+      OCC: [1, 2]
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MC
+
+  - condition:
+      PC: 2
+      PFD: 0
+      Age: [1, 2]
+      SA: 1
+      Ded: 2
+      OCC: 2
+      CLOC: [1, 2]
+    result: Non-STP
+    status_flag: MERT
+
+pa_stp_accept_rules:
+  - condition:
+      PFD: [0, 1]
+      Occ: 1
+      Inc: 1
+      SA: 1
+      Age: [1, 2]
+      Oth: [0, 1]
+    result: STP-Accept
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 1
+      Inc: 1
+      SA: 1
+      Age: 3
+      Oth: [0, 1]
+    result: STP-Accept
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 1
+      Inc: 1
+      SA: 2
+      Age: 1
+      Oth: [0, 1]
+    result: STP-Accept
+
+  - condition:
+      PFD: 0
+      Occ: 1
+      Inc: 2
+      SA: 1
+      Age: [1, 2, 3]
+      Oth: [0, 1]
+    result: STP-Accept
+
+  - condition:
+      PFD: 1
+      Occ: 1
+      Inc: 2
+      SA: 1
+      Age: [1, 2]
+      Oth: [0, 1]
+    result: STP-Accept
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 1
+      Inc: 2
+      SA: 2
+      Age: 1
+      Oth: [0, 1]
+    result: STP-Accept
+
+  - condition:
+      PFD: 0
+      Occ: 1
+      Inc: 2
+      SA: 2
+      Age: 2
+      Oth: 1
+    result: STP-Accept
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 1
+      Inc: [2, 3]
+      SA: [2, 3]
+      Age: [1, 2]
+      Oth: 1
+    result: STP-Accept
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 3
+      Inc: 1
+      SA: 1
+      Age: [1, 2, 3]
+      Oth: 1
+    result: STP-Accept
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 3
+      Inc: 1
+      SA: 1
+      Age: 1
+      Oth: 0
+    result: STP-Accept
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 3
+      Inc: 1
+      SA: 1
+      Age: [2, 3]
+      Oth: 0
+    result: STP-Accept
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 3
+      Inc: 1
+      SA: 1
+      Age: [1, 2, 3]
+      Oth: 1
+    result: STP-Accept
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 2
+      Inc: [1, 2, 3]
+      SA: 1
+      Age: 1
+      Oth: [0, 1]
+    result: STP-Accept
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 2
+      Inc: [1, 2, 3]
+      SA: 2
+      Age: 1
+      Oth: 0
+    result: STP-Accept
+
+pa_stp_reject_rules:
+  - condition:
+      PFD: [0, 1]
+      Occ: 3
+      Inc: 1
+      SA: [2, 3]
+      Age: [1, 2, 3]
+      Oth: [0, 1]
+    result: STP-Reject
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 3
+      Inc: 1
+      SA: [2, 3]
+      Age: [1, 2, 3]
+      Oth: [0, 1]
+    result: STP-Reject
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 2
+      Inc: [1, 2, 3]
+      SA: 1
+      Age: [2, 3]
+      Oth: [0, 1]
+    result: STP-Reject
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 2
+      Inc: [1, 2, 3]
+      SA: 2
+      Age: 3
+      Oth: 1
+    result: STP-Reject
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 2
+      Inc: [1, 2, 3]
+      SA: 3
+      Age: 3
+      Oth: [0, 1]
+    result: STP-Reject
+
+  - condition:
+      PFD: [0, 1]
+      Occ: [1, 2, 3]
+      Inc: [1, 2, 3]
+      SA: [1, 2, 3]
+      Age: 4
+      Oth: [0, 1]
+    result: STP-Reject    
+
+pa_non_stp_rules:
+  - condition:
+      PFD: [0, 1]
+      Occ: 1
+      Inc: 1
+      SA: 2
+      Age: 2
+      Oth: [0, 1]
+    result: Non-STP
+    status_flag: FIN 
+
+  - condition:
+      PFD: 0
+      Occ: 1
+      Inc: 1
+      SA: 2
+      Age: 3
+      Oth: [0, 1]
+    result: Non-STP
+    status_flag: FIN
+    
+  - condition:
+      PFD: 1
+      Occ: 1
+      Inc: 1
+      SA: 2
+      Age: 3
+      Oth: [0, 1]
+    result: Non-STP
+    status_flag: [FIN, MERT]
+
+  - condition:
+      PFD: 1
+      Occ: 1
+      Inc: 2
+      SA: 1
+      Age: 3
+      Oth: [0, 1]
+    result: Non-STP
+    status_flag: [FIN, MERT]
+
+  - condition:
+      PFD: 0
+      Occ: 1
+      Inc: 2
+      SA: 2
+      Age: 2
+      Oth: 0
+    result: Non-STP
+    status_flag: FIN
+
+  - condition:
+      PFD: 1
+      Occ: 1
+      Inc: 2
+      SA: 2
+      Age: 2
+      Oth: 0
+    result: Non-STP
+    status_flag: [FIN, MERT]
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 1
+      Inc: 2
+      SA: 2
+      Age: 3
+      Oth: 0
+    result: Non-STP
+    status_flag: [FIN, MERT]
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 1
+      Inc: 2
+      SA: 2
+      Age: 3
+      Oth: 0
+    result: Non-STP
+    status_flag: FIN  
+
+  - condition:
+      PFD: 1
+      Occ: 1
+      Inc: 2
+      SA: 2
+      Age: 2
+      Oth: [0, 1]
+    result: Non-STP Accept
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 1
+      Inc: [2, 3]
+      SA: 2
+      Age: [1, 2]
+      Oth: 0
+    result: Non-STP Accept
+
+  - condition:
+      PFD: 0
+      Occ: 1
+      Inc: [2, 3]
+      SA: 3
+      Age: [1, 2]
+      Oth: 0
+    result: Non-STP
+    status_flag: [FIN, MERT]
+
+  - condition:
+      PFD: 1
+      Occ: 1
+      Inc: [2, 3]
+      SA: 3
+      Age: [1, 2]
+      Oth: 0
+    result: Non-STP
+    status_flag: [FIN, MC]
+
+  - condition:
+      PFD: [0, 1]
+      Occ: 2
+      Inc: [1,2, 3]
+      SA: 2
+      Age: [1, 2]
+      Oth: 1
+    result: Non-STP Accept
+
+  - condition:
+      PFD: 0
+      Occ: 2
+      Inc: [1, 2, 3]
+      SA: 3
+      Age: [1, 2]
+      Oth: 0
+    result: Non-STP
+    status_flag: [FIN, MERT]
+
+  - condition:
+      PFD: 0
+      Occ: 2
+      Inc: [1, 2, 3]
+      SA: 3
+      Age: [1, 2]
+      Oth: 1
+    result: Non-STP
+    status_flag: FIN
+
+  - condition:
+      PFD: 1
+      Occ: 2
+      Inc: [1, 2, 3]
+      SA: 3
+      Age: [1, 2]
+      Oth: 0
+    result: Non-STP
+    status_flag: [FIN, MC]
+
+  - condition:
+      PFD: 1
+      Occ: 2
+      Inc: [1, 2, 3]
+      SA: 3
+      Age: [1, 2]
+      Oth: 1
+    result: Non-STP
+    status_flag: [FIN, MERT]

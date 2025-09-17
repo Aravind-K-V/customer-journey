@@ -1,0 +1,29 @@
+{
+  "PT": "Personal Accident Insurance",
+  "Age": 80,
+  "CLOC": {
+    "address": "Vijayawada",
+    "city": "Vijayawada",
+    "district": null,
+    "state": "Andhra Pradesh",
+    "pin_code": "521212"
+  },
+  "OCC": "Government Service",
+  "Inc": "50000",
+  "Employment_Type": "{\"salaried\"}",
+  "Insured": {
+    "height_cm": 170,
+    "weight_kg": "65.00",
+    "Ded": null,
+    "SA": "100000000.00"
+  },
+  "Thyroid_Disorders": "no",
+  "Digestive_System_Disorders": "no",
+  "ENT_Disorders": "no",
+  "Diabetes": "no",
+  "Cancer": "no",
+  "Heart_Attack": "no",
+  "Chronic_Liver": "no",
+  "Kidney": "no",
+  "Tobacco": "no"
+}

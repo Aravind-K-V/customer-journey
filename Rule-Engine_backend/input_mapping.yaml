@@ -1,0 +1,90 @@
+health_mapping:
+  PC:
+    Top-up/Base: 1
+    Regular: 2
+
+  Age:
+    "1": [0, 44]
+    "2": [45, 79]
+    "3": [80, 150]
+
+  SA:
+    "1": [0, 2499999]
+    "2": [2800000, 100000000]
+
+  Ded:
+    "1": [0, 749999]
+    "2": [780000, 100000000]
+
+  OCC:
+    Normal: 1
+    High_Risk: 2
+
+  CLOC:
+    Normal: 1
+    Red: 2
+
+  BMI_gt_28:
+    yes: yes
+    no: no
+
+  Thyroid_Disorders:
+    yes: yes
+    no: no
+
+  Digestive_System_Disorders:
+    yes: yes
+    no: no
+
+  ENT_Disorders:
+    yes: yes
+    no: no
+
+  Diabetes:
+    yes: yes
+    no: no
+
+  Cancer:
+    yes: yes
+    no: no
+
+  Heart_Attack:
+    yes: yes
+    no: no
+
+  Chronic_Liver:
+    yes: yes
+    no: no
+
+  Kidney:
+    yes: yes
+    no: no
+
+  Tobacco:
+    yes: yes
+    no: no
+
+pa_mapping:
+  PFD:
+    "NIL": 0
+    "LIFESTYLE": 1
+  Occ:
+    Desk/Sedentary : 1
+    Super Heavy/Sports : 2
+    HouseWife : 3
+  Inc:
+    "1": [0, 999999]
+    "2": [1000000, 2499999]
+    "3": [2500000, 10000000]
+  SA:
+    "1": [0, 2499999]
+    "2": [2500000, 99999999]
+    "3": [100000000, 1000000000]
+  Age:
+    "1": [3, 55]
+    "2": [56, 70]
+    "3": [71, 80]
+    "4": [[0, 2], [81, 150]]
+  Oth:
+    "No" : 0
+    "Yes" : 1
