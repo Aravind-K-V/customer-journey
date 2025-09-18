@@ -27,7 +27,7 @@ const UploadBox = ({ title,file_type, iconSrc, onUploadSuccess }) => {
 
   try {
     // Step 1: Ask backend for presigned URL
-    const presignRes = await axios.post('http://13.202.6.228:8000/save-support-docs', {
+    const presignRes = await axios.post('http://13.232.45.218:8000/save-support-docs', {
       filename: file.name,
       contentType: file.type,
       proposerId,

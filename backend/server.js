@@ -39,7 +39,7 @@ app.get('/health', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://13.202.6.228:${PORT}`);
+    console.log(`Server running on http://13.232.45.218:${PORT}`);
     
     // Now this function call will work correctly
     startDocumentWorker().catch(error => {

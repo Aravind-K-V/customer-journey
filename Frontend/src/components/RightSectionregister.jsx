@@ -18,7 +18,7 @@ const RightSectionregister = () => {
     }
 
     try {
-      const response = await axios.post("http://13.202.6.228:8000/api/auth/register", {
+      const response = await axios.post("http://13.232.45.218:8000/api/auth/register", {
         name,
         email,
         password,

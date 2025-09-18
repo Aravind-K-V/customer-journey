@@ -33,7 +33,7 @@ const UploadBox = ({ title, iconSrc, onUploadSuccess }) => {
     formData.append(fieldName, file);
 
     try {
-      const response = await axios.post('http://13.202.6.228:3000/upload-documents', formData, {
+      const response = await axios.post('http://13.232.45.218:3000/upload-documents', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (progressEvent) => {
           const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);

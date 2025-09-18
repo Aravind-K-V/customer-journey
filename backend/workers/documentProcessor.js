@@ -53,7 +53,7 @@ async function processFinancialDocument(data) {
     const { documentId, proposerId, s3Url } = data; // Pass proposerId to the Python service
     prettyLog(`[Worker][Finance] Processing financial document: ${documentId}`, { proposerId }, { level: 'info' });
 
-    const pythonApiUrl = process.env.PYTHON_API_URL || 'http://13.202.6.228:8091';
+    const pythonApiUrl = process.env.PYTHON_API_URL || 'http://13.232.45.218:8091';
     
     // IMPORTANT: Call the Python API endpoint that expects proposer_id
     const response = await axios.post(`${pythonApiUrl}/process-document/${documentId}`, {
