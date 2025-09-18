@@ -16,7 +16,7 @@ const STPReject = () => {
           return;
         }
 
-        const response = await fetch("http://13.202.6.228:8000/approve-proposal", {
+        const response = await fetch("http://13.202.6.228:8000/reject-proposal", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ proposerId, proposalNumber }),
