@@ -180,13 +180,101 @@ router.post('/save-support-docs', async (req, res) => {
 
 
 // Note: The '/upload' route that streams data might now be redundant for this flow.
-// You can choose to keep it for other purposes or remove it if '/save-support-docs' is the new standard.
 router.post('/upload', async (req, res) => {
-    // This route logic can be deprecated if the new flow is used exclusively.
-    // ... (existing code for /upload)
-    const { s3_url, product_type, user_email } = req.body;
-    // ...
-    res.status(501).json({ message: "This endpoint is deprecated. Please use /save-support-docs." });
+  const { s3_url, product_type, user_email } = req.body;
+  const api_key = process.env.IDP_API_KEY;
+  console.log(s3_url, api_key);
+
+  if (!s3_url || !api_key) {
+    return res.status(400).json({ error: 'Missing s3_url or api_key' });
+  }
+
+
+  try {
+    let request_id = null
+    try {
+      request_id = await underwritingInitialData(product_type, user_email, false)
+      console.log(`Inserted Initial Data into Underwriting table with request_id - ${request_id}`)
+    } catch (err) {
+      console.log("Error in inserting into underwriting table (Initial)", err)
+    }
+
+
+    const idpResponse = await httpClient.post(
+      process.env.IDP_API_URL,
+      { s3_url, api_key },
+      { responseType: 'stream' }
+    );
+
+    let raw = '';
+    idpResponse.data.on('data', (chunk) => {
+      raw += chunk.toString();
+    });
+
+    idpResponse.data.on('end', async () => {
+      try {
+        const jsonLines = raw
+          .split('\n')
+          .filter((line) => line.trim().length > 0);
+
+        const jsonObjects = jsonLines.map((line) => JSON.parse(line));
+        const json = jsonObjects[0];
+
+        json.document_type = 'proposal_form';
+        json.source_url = s3_url;
+        json.validated = true;
+
+
+        console.log("📄 Parsed IDP JSON:");
+        console.dir(json, { depth: null });
+        let isProposal = true; // or false, depending on your default behavior
+
+        const { proposer_id, proposal_no, member_id } = await insertParsedData(json, product_type, request_id, user_email);
+        console.log("Inserted data with proposerId & proposal number:", proposer_id, proposal_no);
+
+        if (proposer_id) {
+          console.log("Using global proposerId:", proposer_id);
+          json.proposer_id = proposer_id;
+        }
+
+        res.json({
+          success: true,
+          message: 'Data inserted successfully',
+          data: json,
+          isProposalForm: isProposal,
+          request_id: request_id,
+          proposalNo: proposal_no,
+          member_id: member_id
+        });
+
+      } catch (parseErr) {
+        const isRequestDeleted = deleteRequestFromUnderwriting(user_email)
+        if (isRequestDeleted === true) {
+          console.log("Request Deleted for email", user_email)
+        }
+        console.error('❌ JSON parse error from stream:', parseErr);
+        res.status(500).json({ error: 'Failed to parse IDP response and Deleted Request' });
+      }
+    });
+
+    idpResponse.data.on('error', (err) => {
+      //QUEUE LOGIC COMES HERE
+      const isRequestDeleted = deleteRequestFromUnderwriting(user_email)
+      if (isRequestDeleted === true) {
+        console.log("Request Deleted for email", user_email)
+      }
+      console.error('❌ Stream error from IDP:', err);
+      res.status(500).json({ error: 'Stream error from IDP', details: "Please Try again" });
+    });
+
+  } catch (error) {
+    const isRequestDeleted = deleteRequestFromUnderwriting(user_email)
+    if (isRequestDeleted === true) {
+      console.log("Request Deleted for email", user_email)
+    }
+    console.error('❌ Upload route failed:', error.message);
+    res.status(500).json({ error: 'Failed to call IDP or insert data', details: error.message });
+  }
 });
 
 export default router;
