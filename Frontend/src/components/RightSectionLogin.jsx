@@ -66,9 +66,9 @@ const RightSectionLogin = () => {
                 sessionStorage.setItem("navigationState", JSON.stringify(navigationState));
 
                 // priority order
-                const priority = ["/FIN", "/MC", "/Tele"];
+                const priority = ["/Rules","/FIN", "/MC", "/Tele"];
                 const nextScreen = priority.find(screen => allowedScreens.includes(screen));
-
+                sessionStorage.setItem("nextRoute",allowedScreens[1]) 
                 if (nextScreen) {
                   navigate(nextScreen, { replace: true });
                 }
